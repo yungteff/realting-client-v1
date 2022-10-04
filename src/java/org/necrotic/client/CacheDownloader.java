@@ -22,9 +22,9 @@ import org.necrotic.Configuration;
  */
 public class CacheDownloader {
 
-	private static final String CACHE_FILE_NAME = "cache.zip"; //The name of the actual .zip file
-	private static final String CACHE_URL = "https://www.dropbox.com/s/xfl44izljzwqpaj/cache.zip?dl=1"; //The url to the .zip file
-	private static final String NEWEST_VERSION_FILE_URL = "https://www.dropbox.com/s/xfl44izljzwqpaj/cache.zip?dl=1"; //The url to the current cache_versiont txt file
+	private static final String CACHE_FILE_NAME = "RealtingCache.zip"; //The name of the actual .zip file
+	private static final String CACHE_URL = "https://www.dropbox.com/s/1n134en1l1oo5gj/RealtingCache.zip?dl=1"; //The url to the .zip file
+	private static final String NEWEST_VERSION_FILE_URL = "https://www.dropbox.com/s/i3aag8t81i78gyn/cache_version.txt?dl=1"; //The url to the current cache_versiont txt file
 	private static final String CURRENT_VERSION_FILE = "cache_version.txt"; //The location of the local cache_version txt file
 	
 	public static boolean UPDATING = true;
@@ -105,7 +105,7 @@ public class CacheDownloader {
 				Client.getClient().setLoadingProgress(percentage);
 				//int downloadSpeed = (int) ((downloaded / 1024) / (1 + ((System.currentTimeMillis() - startTime) / 1000)));
 				//Client.getClient().drawSmoothLoading(percentage, (new StringBuilder()).append("Downloading "+percentage+"% ").append("@ "+downloadSpeed+"Kb/s").toString());
-				//System.out.println((new StringBuilder()).append("Downloading "+percentage+"% ").append("@ "+downloadSpeed+"Kb/s").toString());
+				System.out.println((new StringBuilder()).append("Downloading "+percentage+"% "));
 				//drawLoadingText(percentage, (new StringBuilder()).append("Downloading "+downloadingText+""+s+": "+percentage+"% ").append("@ "+downloadSpeed+"Kb/s").toString());
 			}
 

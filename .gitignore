@@ -9,15 +9,15 @@ obfuscation.map
 .gradle/
 .idea/
 .bin/
-./cache/screenshots/
-./cache/sprites/
-cache/packing/
-cache_version.txt
-cache.zip
+./RealtingCache/screenshots/
+./RealtingCache/sprites/
+RealtingCache/packing/
+RealtingCache_version.txt
+RealtingCache.zip
 
 
 /bin/
 /build/
 /out/
-/cache/packing/
+/RealtingCache/packing/
 /temp/

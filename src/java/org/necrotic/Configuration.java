@@ -16,8 +16,8 @@ public class Configuration {
 	public static final boolean DROPBOX_MODE = false;
 	
 	/** MAIN CONSTANTS **/
-	public final static String CLIENT_NAME = "Kandarin";
-	public final static String WEBSITE = "Kandarin.org";
+	public final static String CLIENT_NAME = "Realting";
+	public final static String WEBSITE = "Realting.org";
 	public final static String TRAY_ICON = "http://necrotic.org/downloads/client/n-32x32.png";
 
 	public final static String CACHE_DIRECTORY_NAME = CLIENT_NAME + "Cache";
