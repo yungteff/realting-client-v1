@@ -1,0 +1,63 @@
+apply plugin: 'java'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/java/'
+        }
+        resources {
+            srcDir 'src/resources/'
+        }
+    }
+}
+
+buildscript {
+    repositories {
+        flatDir dirs: 'proguard/lib'
+    }
+    dependencies {
+        classpath ':proguard'
+    }
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
+    maven { url 'https://jitpack.io/' }
+}
+
+dependencies {
+    compile fileTree(dir: 'lib', include: ['*.jar'])
+    compile 'com.github.MinnDevelopment:java-discord-rpc:v1.3.1'
+    compile 'com.github.MinnDevelopment:discord-rpc-release:v3.3.0'
+}
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'Kandarin Client',
+                   'Implementation-Version': 1,
+                   'Main-Class': 'org.necrotic.client.Client'
+    }
+    baseName = 'Kandarin-gamepack-unobfuscated'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+task proguard(type: proguard.gradle.ProGuardTask) {
+    configuration 'proguard.txt'
+    injars '/build/libs/Kandarin-gamepack-unobfuscated.jar'
+    outjars '/build/libs/Kandarin-gamepack.jar'
+    libraryjars 'proguard/rt.jar'
+    printmapping 'obfuscation.map'
+}
+
+task buildjar {
+    dependsOn 'fatJar'
+    dependsOn 'proguard'
+    tasks.findByName('proguard').mustRunAfter 'fatJar'
+}
