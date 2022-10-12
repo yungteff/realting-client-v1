@@ -1,51 +1,8 @@
 package org.necrotic.client;
 
-import java.applet.AppletContext;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.EOFException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.lang.reflect.Method;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.URL;
-import java.net.UnknownHostException;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Random;
-import java.util.regex.Pattern;
-import java.util.zip.CRC32;
-
-import javax.imageio.ImageIO;
-
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.necrotic.Configuration;
-import org.necrotic.Discord.RichPresence;
 import org.necrotic.client.Settings.Load;
 import org.necrotic.client.Settings.Save;
 import org.necrotic.client.accounts.Account;
@@ -53,15 +10,7 @@ import org.necrotic.client.accounts.AccountManager;
 import org.necrotic.client.cache.Archive;
 import org.necrotic.client.cache.CacheArchive;
 import org.necrotic.client.cache.DataType;
-import org.necrotic.client.cache.definition.Animation;
-import org.necrotic.client.cache.definition.Flo;
-import org.necrotic.client.cache.definition.IdentityKit;
-import org.necrotic.client.cache.definition.ItemDefinition;
-import org.necrotic.client.cache.definition.MobDefinition;
-import org.necrotic.client.cache.definition.ObjectDefinition;
-import org.necrotic.client.cache.definition.SpotAnimDefinition;
-import org.necrotic.client.cache.definition.VarBit;
-import org.necrotic.client.cache.definition.Varp;
+import org.necrotic.client.cache.definition.*;
 import org.necrotic.client.cache.node.Deque;
 import org.necrotic.client.cache.node.Node;
 import org.necrotic.client.cache.ondemand.OnDemandFetcher;
@@ -70,72 +19,48 @@ import org.necrotic.client.constants.GameFrameConstants;
 import org.necrotic.client.constants.SizeConstants;
 import org.necrotic.client.entity.player.Player;
 import org.necrotic.client.entity.player.PlayerHandler;
-import org.necrotic.client.graphics.Background;
-import org.necrotic.client.graphics.CursorData;
-import org.necrotic.client.graphics.DrawingArea;
-import org.necrotic.client.graphics.RSImageProducer;
-import org.necrotic.client.graphics.Sprite;
-import org.necrotic.client.graphics.SpriteLoader;
-import org.necrotic.client.graphics.fonts.Censor;
-import org.necrotic.client.graphics.fonts.RSFontSystem;
-import org.necrotic.client.graphics.fonts.TextClass;
-import org.necrotic.client.graphics.fonts.TextDrawingArea;
-import org.necrotic.client.graphics.fonts.TextInput;
+import org.necrotic.client.graphics.*;
+import org.necrotic.client.graphics.fonts.*;
 import org.necrotic.client.graphics.gameframe.GameFrame;
 import org.necrotic.client.graphics.gameframe.GameFrame.ScreenMode;
 import org.necrotic.client.graphics.gameframe.impl.ChatArea;
 import org.necrotic.client.graphics.gameframe.impl.MapArea;
 import org.necrotic.client.graphics.gameframe.impl.TabArea;
-import org.necrotic.client.graphics.rsinterface.CustomMinimapIcon;
-import org.necrotic.client.graphics.rsinterface.DamageDealer;
-import org.necrotic.client.graphics.rsinterface.GrandExchange;
-import org.necrotic.client.graphics.rsinterface.MagicInterfaceData;
-import org.necrotic.client.graphics.rsinterface.PetSystem;
-import org.necrotic.client.graphics.rsinterface.Settings;
+import org.necrotic.client.graphics.rsinterface.*;
 import org.necrotic.client.io.ByteBuffer;
 import org.necrotic.client.io.ISAACCipher;
 import org.necrotic.client.net.Connection;
-import org.necrotic.client.renderable.Animable;
-import org.necrotic.client.renderable.Animable_Sub3;
-import org.necrotic.client.renderable.Animable_Sub5;
-import org.necrotic.client.renderable.Entity;
-import org.necrotic.client.renderable.Item;
-import org.necrotic.client.renderable.NPC;
-import org.necrotic.client.renderable.PlayerProjectile;
+import org.necrotic.client.renderable.*;
 import org.necrotic.client.tools.FileUtilities;
-import org.necrotic.client.world.CollisionMap;
-import org.necrotic.client.world.CustomObjects;
-import org.necrotic.client.world.Model;
-import org.necrotic.client.world.Object1;
-import org.necrotic.client.world.Object2;
-import org.necrotic.client.world.Object3;
-import org.necrotic.client.world.Object5;
-import org.necrotic.client.world.ObjectManager;
-import org.necrotic.client.world.Rasterizer;
-import org.necrotic.client.world.Texture;
-import org.necrotic.client.world.WorldController;
+import org.necrotic.client.world.*;
 import org.necrotic.client.world.background.ScriptManager;
 import org.necrotic.client.world.music.Class56;
 import org.necrotic.client.world.music.Class56_Sub1_Sub1;
-import org.necrotic.client.world.sound.Class25;
-import org.necrotic.client.world.sound.Class3_Sub7;
-import org.necrotic.client.world.sound.Class3_Sub7_Sub1;
-import org.necrotic.client.world.sound.Class3_Sub7_Sub2;
-import org.necrotic.client.world.sound.Class3_Sub9_Sub1;
-import org.necrotic.client.world.sound.Class5;
-import org.necrotic.client.world.sound.Class5_Sub1;
-import org.necrotic.client.world.sound.Class5_Sub2;
-import org.necrotic.client.world.sound.Class5_Sub2_Sub1;
-import org.necrotic.client.world.sound.Class5_Sub2_Sub2;
-import org.necrotic.client.world.sound.Sound;
-import org.necrotic.client.world.sound.Sounds;
+import org.necrotic.client.world.sound.*;
+
+import javax.imageio.ImageIO;
+import java.applet.AppletContext;
+import java.awt.*;
+import java.awt.datatransfer.*;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.lang.reflect.Method;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.URL;
+import java.net.UnknownHostException;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.regex.Pattern;
+import java.util.zip.CRC32;
 
 public class Client extends GameRenderer {
 
 	private AccountManager accountManager;
 	private GrandExchange grandExchange;
 	public ClientSettings clientSettings = new ClientSettings();
-	public static final RichPresence RICH_PRESENCE = new RichPresence();
+//	public static final RichPresence RICH_PRESENCE = new RichPresence();
 	
 	public int mouseX() {
 		return super.mouseX;
@@ -529,7 +454,7 @@ public class Client extends GameRenderer {
 					Configuration.developerMode = true;
 					break;
 			}
-			RICH_PRESENCE.initiate();
+//			RICH_PRESENCE.initiate();
 		}
 		portOff = 0;
 		isMembers = true;
@@ -12233,19 +12158,19 @@ public class Client extends GameRenderer {
 
 				case 131:
 					String details = getInputBuffer().readString();
-					RICH_PRESENCE.updateDetails(details);
+//					RICH_PRESENCE.updateDetails(details);
 					pktType = -1;
 					return true;
 
 				case 132:
 					String state = getInputBuffer().readString();
-					RICH_PRESENCE.updateState(state);
+//					RICH_PRESENCE.updateState(state);
 					pktType = -1;
 					return true;
 
 				case 133:
 					String key = getInputBuffer().readString();
-					RICH_PRESENCE.updateSmallImageKey(key);
+//					RICH_PRESENCE.updateSmallImageKey(key);
 					pktType = -1;
 					return true;
 			case 81:
