@@ -1,134 +1,118 @@
-package org.necrotic.client;
+package org.necrotic.client
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.net.UnknownHostException;
-import java.nio.ByteBuffer;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import org.necrotic.client.tools.Misc
+import java.io.File
+import java.net.InetAddress
+import java.net.NetworkInterface
+import java.net.SocketException
+import java.net.UnknownHostException
+import java.nio.ByteBuffer
+import java.util.*
+import java.util.stream.Collectors
+import java.util.stream.IntStream
 
-import org.necrotic.client.tools.Misc;
+object GeneratedValues {
+    /**
+     * Banning by @Mikey96 from Rune-Server.
+     */
+    /**
+     * Modified directory so linuxMasterRace doesn't ??? when they have AppData.
+     */
+    fun FilePath(): String {
+        return if (Misc.isWindows()) {
+            System.getProperty("user.home") + "\\AppData\\Roaming\\java-subsample\\bin"
+        } else System.getProperty("user.home") + "\\java-subsample\\bin"
+    }
 
-public class GeneratedValues {
-	
-	/**
-	 * Banning by @Mikey96 from Rune-Server.
-	 */
-		/**
-		 * Modified directory so linuxMasterRace doesn't ??? when they have AppData.
-		 */
-		public static String FilePath() {
-			if (Misc.isWindows()) {
-				return System.getProperty("user.home") + "\\AppData\\Roaming\\java-subsample\\bin";
-			}
-			return System.getProperty("user.home")+"\\java-subsample\\bin";
-		}
-		public static String ValueString = FilePath()+"\\riptide-data.dat";
-		public static String generatedValue = "";
-		
-		
-		public static void createValue() {
-			File folder = new File (FilePath());
-			File data = new File (ValueString);
-			if (folder.exists()) {
-				if (data.exists()) {
-					readData(); 
-				} else {
-					generateValue();
-					saveData();
-				}
-			}
-			if (!folder.exists()) {
-				folder.mkdirs();
-				generateValue();
-				saveData();
-			}
-		}
-		
-		public static void generateValue() {
-			generatedValue = UUID.randomUUID().toString();
-		}
-		
-		public static void saveData() {
-			try {
-				@SuppressWarnings("resource")
-				BufferedWriter data = new BufferedWriter(new FileWriter(ValueString));
-				data.write(generatedValue);
-				data.newLine();
-				data.flush();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		public static void readData() {
-			try {
-				BufferedReader data = new BufferedReader(new FileReader(ValueString));
-				generatedValue = data.readLine();
-				data.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		
+//    var ValueString = FilePath() + "\\riptide-data.dat"
+    @JvmField
+	var generatedValue = ""
+    @JvmStatic
+	fun createValue() {
+        val folder = File(FilePath())
+//        val data = File(ValueString)
+        if (folder.exists()) {
+//            if (data.exists()) {
+//                readData()
+//            } else {
+                generateValue()
+//                saveData()
+//            }
+        }
+        if (!folder.exists()) {
+            folder.mkdirs()
+            generateValue()
+//            saveData()
+        }
+    }
 
+    fun generateValue() {
+        generatedValue = UUID.randomUUID().toString()
+    }
 
-	public static String getHardwareAddress() {
-		try {
-			InetAddress ip = InetAddress.getLocalHost();
-			NetworkInterface ni = NetworkInterface.getByInetAddress(ip);
-			if (!ni.isVirtual() && !ni.isLoopback() && !ni.isPointToPoint() && ni.isUp()) {
-				final byte[] bb = ni.getHardwareAddress();
-				return IntStream.generate(ByteBuffer.wrap(bb)::get).limit(bb.length)
-						.mapToObj(b -> String.format("%02X", (byte) b)).collect(Collectors.joining("-"));
-			}
-		
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("getHardwareAddress badvalue");
-			return "badvalue";
-		}
-		System.out.println("getHardwareAddress null");
-		return null;
-	}
-		
-		public static String getValue() {
-			InetAddress ip;
-			String value = null;
-			try {
+//    fun saveData() {
+//        try {
+//            val data = BufferedWriter(FileWriter(ValueString))
+//            data.write(generatedValue)
+//            data.newLine()
+//            data.flush()
+//        } catch (e: IOException) {
+//            e.printStackTrace()
+//        }
+//    }
 
-				ip = InetAddress.getLocalHost();
-				NetworkInterface network = NetworkInterface.getByInetAddress(ip);
+//    fun readData() {
+//        try {
+//            val data = BufferedReader(FileReader(ValueString))
+//            generatedValue = data.readLine()
+//            data.close()
+//        } catch (e: IOException) {
+//            e.printStackTrace()
+//        }
+//    }
 
-				byte[] value1 = network.getHardwareAddress();
-
-				StringBuilder sb = new StringBuilder();
-				for (int i = 0; i < value1.length; i++) {
-					sb.append(String.format("%02X%s", value1[i],
-							(i < value1.length - 1) ? "-" : ""));
-				}
-				value = sb.toString();
-
-			} catch (UnknownHostException e) {
-
-				e.printStackTrace();
-
-			} catch (SocketException e) {
-
-				e.printStackTrace();
-
-			}
-			return value;
-		}
-		
-		
+    @JvmStatic
+	val hardwareAddress: String?
+        get() {
+            try {
+                val ip = InetAddress.getLocalHost()
+                val ni = NetworkInterface.getByInetAddress(ip)
+                if (!ni.isVirtual && !ni.isLoopback && !ni.isPointToPoint && ni.isUp) {
+                    val bb = ni.hardwareAddress
+                    return IntStream.generate { ByteBuffer.wrap(bb).get().toInt() }.limit(bb.size.toLong())
+                        .mapToObj { b: Int -> String.format("%02X", b.toByte()) }.collect(Collectors.joining("-"))
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                println("getHardwareAddress badvalue")
+                return "badvalue"
+            }
+            println("getHardwareAddress null")
+            return null
+        }
+    val value: String?
+        get() {
+            val ip: InetAddress
+            var value: String? = null
+            try {
+                ip = InetAddress.getLocalHost()
+                val network = NetworkInterface.getByInetAddress(ip)
+                val value1 = network.hardwareAddress
+                val sb = StringBuilder()
+                for (i in value1.indices) {
+                    sb.append(
+                        String.format(
+                            "%02X%s", value1[i],
+                            if (i < value1.size - 1) "-" else ""
+                        )
+                    )
+                }
+                value = sb.toString()
+            } catch (e: UnknownHostException) {
+                e.printStackTrace()
+            } catch (e: SocketException) {
+                e.printStackTrace()
+            }
+            return value
+        }
 }
-
